@@ -1,0 +1,25 @@
+body {
+    background: url("../assets/bg.gif") no-repeat center fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'Quicksand', sans-serif;
+}
+
+#input {
+    position: absolute;
+    top:  60%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: black;
+    padding: 2em;
+    color: white;
+}
+
+#id {
+    margin-left: 1em;
+}
+
+.search {
+    margin-left: 0.5em;
+    width: 1em;
+}

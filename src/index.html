@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link href="./index.css" rel="stylesheet">
+    <meta charset="utf-8"/>
+    <title>SoundMint downloader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+    <link href="../dependencies/js-snackbar.css" rel="stylesheet">
+    <script type="text/javascript" src="../dependencies/js-snackbar.js" ></script>
+  </head>
+  <body>   
+    <div id="input">
+        <form id="form">
+            <label for="id">SoundMint ID</label>
+            <input type="id" id="id" name="id" required>
+            <img class="search" src="../assets/search.png"/>
+        </form>
+    </div>   
+  </body>
+  <script type="text/javascript">
+    document.getElementById("form").addEventListener('submit', functSubmit);
+
+    function functSubmit(event) {
+        event.preventDefault();
+        var id = document.getElementById("id").value;
+        fetch(`https://soundmint-public.s3.amazonaws.com/KLOUD_REVEALED/meta/${id}`).then(resp => {
+            if (resp.ok) {
+                resp.json().then(function(json) {
+                    const url = json["animation_url"];
+                    downloadVideo(url)
+                });
+            } else {
+                new SnackBar({
+                message: "Impossible to fetch that ID."
+            });
+            }
+        }).catch(_ => {
+            new SnackBar({
+                message: "Impossible to fetch that ID."
+            });
+        });
+    }
+
+    function downloadVideo(url) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function() {
+            var urlCreator = window.URL || window.webkitURL;
+            var imageUrl = urlCreator.createObjectURL(this.response);
+            var tag = document.createElement('a');
+            tag.href = imageUrl;
+            tag.target = '_blank';
+            tag.download = 'sample.png';
+            document.body.appendChild(tag);
+            tag.click();
+            document.body.removeChild(tag);
+        };
+        xhr.onerror = err => {
+            alert('Failed to download picture');
+        };
+        xhr.send();
+    }
+    </script>
+</html>
